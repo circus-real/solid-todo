@@ -1,8 +1,12 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { Component } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import { db } from ".";
 
 const NewTodo: Component<{}> = () => {
+  const [inputValue, setInputValue] = createSignal<string>("");
+
+  let formRef: HTMLFormElement;
+
   function addTodo(data: FormData): void {
     const text: string | undefined = data.get("text")?.toString();
     console.log(text);
@@ -15,19 +19,24 @@ const NewTodo: Component<{}> = () => {
     console.log("done");
   }
 
-  let formRef: HTMLFormElement;
-
   const handleSubmit = (e: Event) => {
     e.preventDefault();
     if (formRef) {
       const formData = new FormData(formRef);
       addTodo(formData);
     }
+    setInputValue("");
   };
 
   return (
     <form onSubmit={(e: Event) => handleSubmit(e)} ref={(el) => (formRef = el)}>
-      <input type="text" name="text" placeholder="something to do..." />
+      <input
+        type="text"
+        name="text"
+        placeholder="something to do..."
+        value={inputValue()}
+        onInput={(e) => setInputValue(e.currentTarget.value)}
+      />
       <button type="submit">Add</button>
     </form>
   );
