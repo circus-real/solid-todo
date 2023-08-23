@@ -11,6 +11,7 @@ import { db } from "./index";
 
 const Todo: Component<{ todo: DocumentData }> = (props) => {
   const [done, setDone] = createSignal<boolean>(props.todo.done);
+  const [text, setText] = createSignal<string>(`${done() ? "✔️" : "❌"}`);
   const bgColor: Accessor<string> = () =>
     done() ? "bg-green-300" : "bg-red-300";
 
@@ -23,6 +24,7 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
     });
 
     setDone(!done());
+    setText(done() ? "✔️" : "❌");
   }
 
   function remove(): void {
@@ -31,15 +33,15 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
   }
 
   return (
-    <li class={bgColor()}>
-      <div class="p-2">
-        <p>{props.todo.text}</p>
-        <button onClick={toggle}>
-          <Show when={props.todo.done} fallback="❌">
-            ✔️
-          </Show>
-        </button>
-        <button onClick={remove}>🗑</button>
+    <li class={`${bgColor()} p-2 rounded-md mb-1`}>
+      <div>
+        <p>
+          <button onClick={toggle}>{text()}</button>
+          <button class="pr-2 pl-1" onClick={remove}>
+            🗑
+          </button>
+          {props.todo.text}
+        </p>
       </div>
     </li>
   );

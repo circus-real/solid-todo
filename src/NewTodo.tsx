@@ -9,7 +9,6 @@ const NewTodo: Component<{}> = () => {
 
   function addTodo(data: FormData): void {
     const text: string | undefined = data.get("text")?.toString();
-    console.log(text);
     if (!text) return;
     addDoc(collection(db, "todos"), {
       text: text,
@@ -29,15 +28,23 @@ const NewTodo: Component<{}> = () => {
   };
 
   return (
-    <form onSubmit={(e: Event) => handleSubmit(e)} ref={(el) => (formRef = el)}>
+    <form
+      onSubmit={(e: Event) => handleSubmit(e)}
+      ref={(el) => (formRef = el)}
+      class="pb-3"
+    >
       <input
+        class="border-2 rounded-lg border-gray-400"
         type="text"
         name="text"
         placeholder="something to do..."
         value={inputValue()}
         onInput={(e) => setInputValue(e.currentTarget.value)}
+        autofocus
       />
-      <button type="submit">Add</button>
+      <button class="pl-4" type="submit">
+        Add
+      </button>
     </form>
   );
 };

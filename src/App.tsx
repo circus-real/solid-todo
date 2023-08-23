@@ -15,9 +15,6 @@ const App: Component<{}> = () => {
 
   return (
     <main>
-      <h1>solid-todo</h1>
-      <hr />
-
       <NewTodo />
       <TodoList data={todos.data} />
     </main>
