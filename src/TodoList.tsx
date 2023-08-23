@@ -1,4 +1,4 @@
-import { For, type Component, createSignal } from "solid-js";
+import { For, type Component } from "solid-js";
 
 import Todo from "./Todo";
 import { DocumentData } from "firebase/firestore";
