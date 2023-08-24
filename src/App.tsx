@@ -1,4 +1,4 @@
-import { createMemo, type Component } from "solid-js";
+import { createMemo, type Component, Match, Switch } from "solid-js";
 
 import TodoList from "./TodoList";
 import NewTodo from "./NewTodo";
@@ -16,7 +16,17 @@ const App: Component<{}> = () => {
   return (
     <main>
       <NewTodo />
-      <TodoList data={todos.data} />
+      <Switch>
+        <Match when={todos.loading}>
+          <p>Loading...</p>
+        </Match>
+        <Match when={todos.error}>
+          <p>An error occured: {todos.error?.message}</p>
+        </Match>
+        <Match when={todos.data}>
+          <TodoList data={todos.data} />
+        </Match>
+      </Switch>
     </main>
   );
 };

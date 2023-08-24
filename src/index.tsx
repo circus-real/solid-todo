@@ -1,5 +1,8 @@
 //! --------------- Firebase ---------------
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { FirebaseProvider } from "solid-firebase";
 
 // Firebase config
 const firebaseConfig = {
@@ -13,7 +16,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+
+// Auth
+export const auth = getAuth(app);
 
 // Firestore
 export const db = getFirestore(app);
@@ -24,8 +30,6 @@ import { render } from "solid-js/web";
 
 import "./index.css";
 import App from "./App";
-import { FirebaseProvider } from "solid-firebase";
-import { getFirestore } from "firebase/firestore";
 
 const root = document.getElementById("root");
 

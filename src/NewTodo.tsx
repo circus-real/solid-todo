@@ -1,6 +1,6 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { Component, createSignal } from "solid-js";
-import { db } from ".";
+import { db } from "./index";
 
 const NewTodo: Component<{}> = () => {
   const [inputValue, setInputValue] = createSignal<string>("");

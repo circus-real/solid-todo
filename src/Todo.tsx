@@ -6,7 +6,7 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-import { Accessor, Component, Show, createSignal } from "solid-js";
+import { Accessor, Component, createSignal } from "solid-js";
 import { db } from "./index";
 
 const Todo: Component<{ todo: DocumentData }> = (props) => {
