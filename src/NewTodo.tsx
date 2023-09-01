@@ -1,40 +1,45 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { Component, createSignal } from "solid-js";
-import { db } from "./index";
+import { auth, db } from "./index";
+import { useAuth } from "solid-firebase";
 
 const NewTodo: Component<{}> = () => {
   const [inputValue, setInputValue] = createSignal<string>("");
+  const user = useAuth(auth);
 
   let formRef: HTMLFormElement;
 
-  function addTodo(data: FormData): void {
-    const text: string | undefined = data.get("text")?.toString();
-    if (!text) return;
-    addDoc(collection(db, "todos"), {
+  async function addTodo(data: FormData): Promise<void> {
+    const text: string = data.get("text")?.toString()!;
+    const docRef = await addDoc(collection(db, "todos"), {
+      uid: user.data?.uid,
+      uname: user.data?.displayName,
       text: text,
       done: false,
       createdAt: serverTimestamp(),
     });
-    console.log("done");
+    addDoc(collection(db, "todos", docRef.id, "logs"), {
+      text: "todo created",
+      timestamp: serverTimestamp(),
+    });
   }
 
-  const handleSubmit = (e: Event) => {
+  function handleSubmit(e: Event) {
     e.preventDefault();
     if (formRef) {
-      const formData = new FormData(formRef);
-      addTodo(formData);
+      addTodo(new FormData(formRef) as FormData);
     }
     setInputValue("");
-  };
+  }
 
   return (
     <form
       onSubmit={(e: Event) => handleSubmit(e)}
       ref={(el) => (formRef = el)}
-      class="pb-3"
+      class="pb-1"
     >
       <input
-        class="border-2 rounded-lg border-gray-400"
+        class="btn"
         type="text"
         name="text"
         placeholder="something to do..."
@@ -42,7 +47,7 @@ const NewTodo: Component<{}> = () => {
         onInput={(e) => setInputValue(e.currentTarget.value)}
         autofocus
       />
-      <button class="pl-4" type="submit">
+      <button class="ml-2 btn" type="submit">
         Add
       </button>
     </form>

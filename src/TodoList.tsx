@@ -3,8 +3,8 @@ import { For, type Component } from "solid-js";
 import Todo from "./Todo";
 import { DocumentData } from "firebase/firestore";
 
-const TodoList: Component<{ data: DocumentData[] | undefined }> = (props: {
-  data: DocumentData[] | undefined;
+const TodoList: Component<{ data: DocumentData[] }> = (props: {
+  data: DocumentData[];
 }) => {
   return (
     <section>

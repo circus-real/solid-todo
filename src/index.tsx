@@ -2,7 +2,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { FirebaseProvider } from "solid-firebase";
 
 // Firebase config
 const firebaseConfig = {
@@ -28,6 +27,7 @@ export const db = getFirestore(app);
 /* @refresh reload */
 import { render } from "solid-js/web";
 
+import { FirebaseProvider } from "solid-firebase";
 import "./index.css";
 import App from "./App";
 
