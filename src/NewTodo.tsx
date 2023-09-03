@@ -20,6 +20,7 @@ const NewTodo: Component<{}> = () => {
     });
     addDoc(collection(db, "todos", docRef.id, "logs"), {
       text: "todo created",
+      user: auth.currentUser?.displayName,
       timestamp: serverTimestamp(),
     });
   }
@@ -39,7 +40,7 @@ const NewTodo: Component<{}> = () => {
       class="pb-1"
     >
       <input
-        class="btn"
+        class="btn pr-4 md:pr-8 lg:pr-12"
         type="text"
         name="text"
         placeholder="something to do..."
@@ -47,7 +48,7 @@ const NewTodo: Component<{}> = () => {
         onInput={(e) => setInputValue(e.currentTarget.value)}
         autofocus
       />
-      <button class="ml-2 btn" type="submit">
+      <button class="btn ml-2" type="submit">
         Add
       </button>
     </form>

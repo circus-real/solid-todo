@@ -24,17 +24,17 @@ import {
   createResource,
   createSignal,
 } from "solid-js";
-import { db } from "./index";
-import { useFirestore } from "solid-firebase";
+import { auth, db } from "./index";
+import { useAuth, useFirestore } from "solid-firebase";
 
 const Todo: Component<{ todo: DocumentData }> = (props) => {
   const [done, setDone] = createSignal<boolean>(props.todo.done);
   const [text, setText] = createSignal<string>(done() ? "✔️" : "❌");
   const [show, setShow] = createSignal<boolean>(false);
   const bgColor: Accessor<string> = () =>
-    done() ? "bg-green-300" : "bg-red-300";
+    done() ? "bg-green-800" : "bg-red-800";
   const codeBgColor: Accessor<string> = () =>
-    done() ? "bg-green-400" : "bg-red-400";
+    done() ? "bg-green-900" : "bg-red-900";
   const logQuery = query(
     collection(db, "todos", props.todo.id, "logs"),
     orderBy("timestamp", "desc"),
@@ -55,6 +55,7 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
     setDone(!done());
     addDoc(collection(db, "todos", props.todo.id, "logs"), {
       text: `toggled to ${done() ? "complete" : "incomplete"}`,
+      user: auth.currentUser?.displayName,
       timestamp: serverTimestamp(),
     });
 
@@ -74,13 +75,13 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
     });
   }
 
-  function toDate(timestamp: Timestamp) {
+  function toDate(timestamp: Timestamp): Date {
     return Timestamp.fromMillis(
       timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
     ).toDate();
   }
 
-  function formatDate(date: Date) {
+  function formatDate(date: Date): string {
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-based, so add 1
     const day = String(date.getDate()).padStart(2, "0");
     const hour = String(date.getHours()).padStart(2, "0");
@@ -89,8 +90,12 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
     return `${month}:${day}:${hour}:${minute}`;
   }
 
+  function getLogUser(item: DocumentData): string {
+    return item.user || "anon";
+  }
+
   return (
-    <li class="mb-1 pb-2 bg-gray-200 rounded-md">
+    <li class="mb-1 pb-2 bg-gray-700 rounded-md">
       <section class={`p-2 rounded-md ${bgColor()}`}>
         <p>
           <button onClick={toggle}>{text()}</button>
@@ -115,7 +120,7 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
           >
             <path
               d="M33.5 17.4019C35.5 18.5566 35.5 21.4434 33.5 22.5981L5 39.0526C3 40.2073 0.5 38.7639 0.5 36.4545L0.5 3.54552C0.5 1.23612 3 -0.207259 5 0.947442L33.5 17.4019Z"
-              fill="#4B5563"
+              fill="#6B7280"
             />
           </svg>
           <p class="btn">Show logs</p>
@@ -134,7 +139,7 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
             </p>
           </Match>
           <Match when={logs.state === "ready"}>
-            <div class="px-2">
+            <section class="px-2">
               <p>
                 <code>mm:dd:hh:mm</code> as month, day, hour, minute:
               </p>
@@ -144,13 +149,13 @@ const Todo: Component<{ todo: DocumentData }> = (props) => {
                     <li>
                       <p>
                         <code>{formatDate(toDate(item.timestamp))}</code> |{" "}
-                        {item.text}
+                        {item.text} by {getLogUser(item)}
                       </p>
                     </li>
                   )}
                 </For>
               </ul>
-            </div>
+            </section>
           </Match>
         </Switch>
       </Show>
