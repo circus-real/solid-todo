@@ -1,8 +1,6 @@
 # `solid-todo`
 
-This is a small side project.
-
-## tech stack
+## Tech stack
 
 - [Firebase](https://firebase.google.com/)
 - [SolidJS](https://solidjs.com/)
