@@ -1,12 +1,12 @@
 # `solid-todo`
 
-this is just a small side project (i was bored)
+This is a small side project.
 
 ## tech stack
 
-Firebase
-SolidJS
-TailwindCSS
+- Firebase
+- SolidJS
+- TailwindCSS
 
 ## Contributors
 
