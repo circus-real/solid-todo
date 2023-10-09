@@ -1,4 +1,6 @@
-# `solid-todo`
+# solid-todo
+
+Todo-list application
 
 ## Tech stack
 
